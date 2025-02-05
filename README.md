@@ -1,6 +1,10 @@
 # Parallel-KCore
 SIGMOD'25: An efficient parallel algorithm and implementation for k-core decomposition
 
+## Download
+```bash
+git clone git@github.com:ucrparlay/Parallel-KCore.git
+```
 
 ## Requirements
 + CMake >= 3.15 
