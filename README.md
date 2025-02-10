@@ -22,14 +22,16 @@ cd KCore && make
 ./kcore [-s] [-i graph_path]
 ```
 
-+ -s: make sure the input graph is symmetric (undirected). If not, the directed graph will be symmetrized)
++ -s: indicate the input graph is symmetric (undirected). If not, the directed graph will be symmetrized without the `-s` parameter.
 + -i graph_path: the graph path (in .adj or .bin, see [GBBS graph format](https://paralg.github.io/gbbs/docs/formats))
 
-For example, to run our algorithm on twitter_sym.bin
+For example, to run our algorithm on twitter
 ```bash
 ./kcore -s -i data/twitter_sym.bin
+./kcore -i data/twitter.bin
 ```
 or
 ```bash
 ./kcore -s -i data/twitter_sym.adj
+./kcore -i data/twitter.adj
 ```
