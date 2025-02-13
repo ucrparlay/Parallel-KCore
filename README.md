@@ -1,5 +1,5 @@
 # Parallel-KCore
-SIGMOD'25: An efficient parallel algorithm and implementation for k-core decomposition
+SIGMOD'25: Parallel k-Core Decomposition: Theory and Practice
 
 ## Download
 ```bash
