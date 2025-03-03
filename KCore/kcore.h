@@ -327,7 +327,7 @@ class KCore {
     size_t k = 0;
     if (avg_deg < bucketing_pt) {
       while (k < bucketing_pt) {
-        size_t sub_rho = 0;
+        // size_t sub_rho = 0;
         if (remaining_vertices.size() == 0) {
           break;
         }
@@ -359,7 +359,7 @@ class KCore {
         t_pack.stop();
         t_push.start();
         while (size) {
-          sub_rho++;
+          // sub_rho++;
           num_rho++;
           bool counting_flag = false;
           parallel_for(
@@ -410,7 +410,7 @@ class KCore {
       }
     }
 
-    // remaining vertices using hierrachical buckets
+    // remaining vertices using hierarchical buckets
     if (remaining_vertices.size() > 0) {
       for (NodeId base_k = 0;; base_k += stride) {
         if (remaining_vertices.size() == 0) {
@@ -437,7 +437,7 @@ class KCore {
         t_insert.stop();
         NodeId offset_k = 0;
         for (NodeId k = base_k; k < base_k + stride; k++) {
-          size_t sub_rho = 0;
+          // size_t sub_rho = 0;
 
           t_dump.start();
           if (base_k != k) {
@@ -471,7 +471,7 @@ class KCore {
           auto size = buckets[k & bucket_mask].pack_into_pred(
               make_slice(frontier), [&](NodeId v) { return coreness[v] == k; });
           while (size) {
-            sub_rho++;
+            // sub_rho++;
             num_rho++;
             // t_rho_round.start();
             bool counting_flag = false;
@@ -540,7 +540,7 @@ class KCore {
     t_pack.total();
     t_add.total();
     t_check_n_count.total();
-    cout << "rho: " << num_rho << endl;
+    // cout << "rho: " << num_rho << endl;
     return coreness;
   }
 };
