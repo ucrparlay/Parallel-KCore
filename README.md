@@ -23,7 +23,7 @@ cd KCore && make
 ```
 
 + -s: indicate the input graph is symmetric (undirected). If not, the directed graph will be symmetrized without the `-s` parameter.
-+ -i graph_path: the graph path (in .adj or .bin, see [GBBS graph format](https://paralg.github.io/gbbs/docs/formats))
++ -i graph_path: the graph path (.adj or .bin formats are both accepted, see [GBBS graph format](https://paralg.github.io/gbbs/docs/formats) as a reference. You can find the datasets at [PASGAL](https://pasgal-bs.cs.ucr.edu/bin/))
 
 For example, to run our algorithm on twitter
 ```bash
@@ -34,4 +34,19 @@ or
 ```bash
 ./kcore -s -i data/twitter_sym.adj
 ./kcore -i data/twitter.adj
+```
+
+If you use our code, please cite our paper:
+
+```
+@article{liu2025parallel,
+  title={Parallel k-Core Decomposition: Theory and Practice},
+  author={Liu, Youzhe and Dong, Xiaojun and Gu, Yan and Sun, Yihan},
+  journal={Proceedings of the ACM on Management of Data},
+  volume={3},
+  number={3},
+  pages={1--27},
+  year={2025},
+  publisher={ACM New York, NY, USA}
+}
 ```

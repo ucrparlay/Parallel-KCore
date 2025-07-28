@@ -540,7 +540,7 @@ class KCore {
     t_pack.total();
     t_add.total();
     t_check_n_count.total();
-    // cout << "rho: " << num_rho << endl;
+    cout << "rho: " << num_rho << endl;
     return coreness;
   }
 };
