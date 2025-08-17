@@ -73,9 +73,8 @@ def batch_evaluate_graphs(graph_paths, kcore_executable, output_csv="batch_resul
         if timing_data is not None:
             result = {
                 'graph': graph_name,
-                'graph_path': str(graph_path),
+                'avg_time': timing_data.get('avg_time', 'N/A')
             }
-            result.update(timing_data)  # Add all timing data
             results.append(result)
             
             # Print summary of this run
@@ -92,18 +91,8 @@ def batch_evaluate_graphs(graph_paths, kcore_executable, output_csv="batch_resul
     
     # Save results to CSV
     if results:
-        # Determine all possible fieldnames from the results
-        all_fieldnames = set()
-        for result in results:
-            all_fieldnames.update(result.keys())
-        
-        # Order fieldnames nicely
-        ordered_fieldnames = ['graph', 'graph_path', 'warmup_time', 
-                            'round_1_time', 'round_2_time', 'round_3_time', 
-                            'round_4_time', 'round_5_time', 'avg_time']
-        # Add any additional fields that might exist
-        fieldnames = [f for f in ordered_fieldnames if f in all_fieldnames]
-        fieldnames.extend([f for f in all_fieldnames if f not in fieldnames])
+        # Only include essential fields: graph name and average time
+        fieldnames = ['graph', 'avg_time']
         
         with open(output_csv, 'w', newline='') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -119,11 +108,11 @@ def batch_evaluate_graphs(graph_paths, kcore_executable, output_csv="batch_resul
         print("-" * 80)
         for result in results:
             avg_time = result.get('avg_time', 'N/A')
-            warmup_time = result.get('warmup_time', 'N/A')
-            round_times = [str(result.get(f'round_{i}_time', 'N/A'))[:6] for i in range(1, 6)]
-            rounds_str = ', '.join(round_times)
+            # warmup_time = result.get('warmup_time', 'N/A')
+            # round_times = [str(result.get(f'round_{i}_time', 'N/A'))[:6] for i in range(1, 6)]
+            # rounds_str = ', '.join(round_times)
             
-            print(f"{result['graph'][:24]:<25} {avg_time:<12.6f} {warmup_time:<12.6f} {rounds_str:<30}")
+            # print(f"{result['graph'][:24]:<25} {avg_time:<12.6f} {warmup_time:<12.6f} {rounds_str:<30}")
         
         if len(results) < len(graph_paths):
             print(f"\nNote: {len(graph_paths) - len(results)} graphs failed to run")
