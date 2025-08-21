@@ -43,12 +43,13 @@ declare -a graph=(
 )
 
 declare -a graph_syn=(
-  
+  "2d.bin"
+  "core.bin"
+  "powerlaw.bin"
 )
 
-
 declare graph_path="/data/graphs/links/"
-#declare graph_path="/data9/xdong038/"
+declare graph_path_syn="/colddata/yliu908/"
 
 declare numactl="numactl -i all"
 
@@ -65,6 +66,33 @@ for graph in "${graph[@]}"; do
   output=""
   for i in {1..3}; do
     run_output=$(${numactl} ./KCore -s -b ${graph_path}${graph})
+    output="$output$run_output"
+    echo "$run_output" >> kcore.txt
+  done
+  
+  # Extract the average time from "time per iter: X.XXXXX" line
+  # Use grep with word boundaries to match the exact pattern
+  avg_time=$(echo "$output" | grep -o "time per iter: [0-9.]*" | tail -1 | sed 's/time per iter: //')
+  
+  # Extract just the graph filename without path
+  graph_name=$(basename "$graph")
+  
+  # Append to CSV file
+  echo "$graph_name,$avg_time" >> kcore.csv
+  
+  # Add separator to text file
+  echo "------------------------------------" >> kcore.txt
+
+done
+
+
+for graph in "${graph_syn[@]}"; do
+  echo ${graph_path_syn}${graph}
+  
+  # Run KCore multiple times and capture all output
+  output=""
+  for i in {1..3}; do
+    run_output=$(${numactl} ./KCore -s -b ${graph_path_syn}${graph})
     output="$output$run_output"
     echo "$run_output" >> kcore.txt
   done
