@@ -60,56 +60,104 @@ make
 echo "graph_name,avg_running_time" > kcore.csv
 
 for graph in "${graph[@]}"; do
-  echo ${graph_path}${graph}
+  echo "Processing: ${graph_path}${graph}"
+  
+  # Check if graph file exists
+  if [ ! -f "${graph_path}${graph}" ]; then
+    echo "  ✗ Graph file not found, skipping..."
+    graph_name=$(basename "$graph")
+    echo "$graph_name,NA" >> kcore.csv
+    echo "------------------------------------" >> kcore.txt
+    continue
+  fi
   
   # Run KCore multiple times and capture all output
   output=""
+  success_count=0
+  total_runs=3
+  
   for i in {1..3}; do
-    run_output=$(${numactl} ./KCore -s -b ${graph_path}${graph})
-    output="$output$run_output"
+    echo "  Run $i/3..."
+    if run_output=$(${numactl} ./KCore -s -b ${graph_path}${graph} 2>&1); then
+      output="$output$run_output"
+      success_count=$((success_count + 1))
+      echo "    ✓ Run $i successful"
+    else
+      echo "    ✗ Run $i failed"
+      # Still capture output for debugging
+      output="$output$run_output"
+    fi
     echo "$run_output" >> kcore.txt
   done
   
   # Extract the average time from "time per iter: X.XXXXX" line
-  # Use grep with word boundaries to match the exact pattern
   avg_time=$(echo "$output" | grep -o "time per iter: [0-9.]*" | tail -1 | sed 's/time per iter: //')
   
   # Extract just the graph filename without path
   graph_name=$(basename "$graph")
   
-  # Append to CSV file
-  echo "$graph_name,$avg_time" >> kcore.csv
+  # Check if we got valid timing data
+  if [ -n "$avg_time" ] && [ "$success_count" -gt 0 ]; then
+    echo "  ✓ Success: $success_count/$total_runs runs, avg_time: $avg_time"
+    echo "$graph_name,$avg_time" >> kcore.csv
+  else
+    echo "  ✗ Failed to get valid timing data, using NA"
+    echo "$graph_name,NA" >> kcore.csv
+  fi
   
   # Add separator to text file
   echo "------------------------------------" >> kcore.txt
-
 done
 
 
 for graph in "${graph_syn[@]}"; do
-  echo ${graph_path_syn}${graph}
+  echo "Processing: ${graph_path_syn}${graph}"
+  
+  # Check if graph file exists
+  if [ ! -f "${graph_path_syn}${graph}" ]; then
+    echo "  ✗ Graph file not found, skipping..."
+    graph_name=$(basename "$graph")
+    echo "$graph_name,NA" >> kcore.csv
+    echo "------------------------------------" >> kcore.txt
+    continue
+  fi
   
   # Run KCore multiple times and capture all output
   output=""
+  success_count=0
+  total_runs=3
+  
   for i in {1..3}; do
-    run_output=$(${numactl} ./KCore -s -b ${graph_path_syn}${graph})
-    output="$output$run_output"
+    echo "  Run $i/3..."
+    if run_output=$(${numactl} ./KCore -s -b ${graph_path_syn}${graph} 2>&1); then
+      output="$output$run_output"
+      success_count=$((success_count + 1))
+      echo "    ✓ Run $i successful"
+    else
+      echo "    ✗ Run $i failed"
+      # Still capture output for debugging
+      output="$output$run_output"
+    fi
     echo "$run_output" >> kcore.txt
   done
   
   # Extract the average time from "time per iter: X.XXXXX" line
-  # Use grep with word boundaries to match the exact pattern
   avg_time=$(echo "$output" | grep -o "time per iter: [0-9.]*" | tail -1 | sed 's/time per iter: //')
   
   # Extract just the graph filename without path
   graph_name=$(basename "$graph")
   
-  # Append to CSV file
-  echo "$graph_name,$avg_time" >> kcore.csv
+  # Check if we got valid timing data
+  if [ -n "$avg_time" ] && [ "$success_count" -gt 0 ]; then
+    echo "  ✓ Success: $success_count/$total_runs runs, avg_time: $avg_time"
+    echo "$graph_name,$avg_time" >> kcore.csv
+  else
+    echo "  ✗ Failed to get valid timing data, using NA"
+    echo "$graph_name,NA" >> kcore.csv
+  fi
   
   # Add separator to text file
   echo "------------------------------------" >> kcore.txt
-
 done
 
 echo "Results saved to kcore.csv"
