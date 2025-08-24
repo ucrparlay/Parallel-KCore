@@ -214,3 +214,4 @@ rm "$temp_csv"
 
 echo "Combined results saved to $combined_csv"
 echo "Columns: graph_name, 8_ours_configs, gbbs_time, pkc_park_time, pkc_pkc_time"
+
