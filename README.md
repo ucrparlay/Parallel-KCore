@@ -3,7 +3,7 @@ SIGMOD'25: Parallel k-Core Decomposition: Theory and Practice
 
 ## Download
 ```bash
-git clone git@github.com:ucrparlay/Parallel-KCore.git
+git clone --recursive git@github.com:ucrparlay/Parallel-KCore.git
 ```
 
 ## Requirements
