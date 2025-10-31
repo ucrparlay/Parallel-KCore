@@ -77,7 +77,7 @@ for graph in graphs:
     
     try:
         # Run the command and capture output
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=1200)  # 2 minute timeout
+        result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, timeout=1200)  # 2 minute timeout
         
         # Extract CSV output line
         output_lines = result.stdout.split('\n')

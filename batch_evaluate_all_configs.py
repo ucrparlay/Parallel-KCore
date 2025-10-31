@@ -71,8 +71,9 @@ def compile_kcore():
     try:
         result = subprocess.run(
             ["make", "-C", "KCore"],
-            capture_output=True,
-            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
             timeout=120
         )
         
@@ -94,7 +95,7 @@ def run_kcore_on_graph(graph_path, kcore_executable):
     """Run KCore on a single graph and extract average timing information"""
     try:
         cmd = [str(kcore_executable), "-i", str(graph_path)]
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, timeout=600)
         
         if result.returncode != 0:
             print(f"  ✗ Execution failed: {result.stderr}")
